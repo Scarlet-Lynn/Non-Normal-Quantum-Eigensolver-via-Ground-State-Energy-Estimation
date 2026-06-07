@@ -76,7 +76,7 @@ J = [1+1i 1 0 0
 eig_est = zeros(1, 3);
 sample_count = zeros(1, 3);
 for t = 1:3
-    P = gallery('randsvd', n, kappa(t)); % generate an invertible matrix with condition number=kappa(i)
+    P = gallery('randsvd', n, kappa(t)); generate an invertible matrix so that A = P * J / P has Jordan condition number=kappa(i)
     A = P * J / P;
     [eig_est(t), sample_count(t)] = eigensolver(A, n, m, kappa(t), epsilon);
 end
