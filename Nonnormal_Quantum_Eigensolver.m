@@ -64,6 +64,10 @@ function mu = ext_eig(A, n, m, kappa, epsilon)
     end
 end
 
+% ═════════════════════════════════════════════════════════════════════
+% Asymptotic Performance
+% ═════════════════════════════════════════════════════════════════════
+
 % fix m=2 and epsilon = 0.01, vary kappa
 n = 4;
 m = 2;
@@ -135,6 +139,10 @@ xlabel('epsilon (log scale)');
 ylabel('sample count (log scale)');
 hold off;
 
+% ═════════════════════════════════════════════════════════════════════
+% Extreme Eigenvalue Estimation and Extreme Eigenvector Preparation
+% ═════════════════════════════════════════════════════════════════════
+
 % generating matrix instances
 % instance 1
 D = [1+1i 0 0 0
@@ -167,5 +175,16 @@ H = randn(n)+1i*randn(n);
 H = H+H';
 U = expm(1i*H);
 kappa = 1;
+epsilon = 0.01;
 A = U*D*U^(-1);
 mu = ext_eig(A, n, m, kappa, epsilon);
+err = abs(mu-D(1,1));
+
+% eigenstate preparation
+H = sqrtm((A-mu*eye(n))'*(A-mu*eye(n)));
+[V, eig_val] = eig(H);
+eigenvalues = diag(eig_val);
+[~, idx] = min(eigenvalues);
+ground_state = V(:, idx);
+eig_state_true = U(:,1);   % the true eigenstate corresponding to the extreme eigenvalue
+fidelity = abs(eig_state_true' * ground_state)^2;
