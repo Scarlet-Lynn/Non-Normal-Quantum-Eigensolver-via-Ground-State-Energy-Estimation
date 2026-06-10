@@ -37,6 +37,9 @@ function [mu, sample] = eigensolver_upper(A, n, m, kappa, epsilon)
                 for j = -s:s
                     sample = sample+1;
                     mu = center + (i*delta_l+j*delta_l*1i);
+                    if imag(mu_candidate) <= 0
+                        continue;
+                    end
                     sv = svd(A-mu*I);
                     sigma_0 = min(sv);
                     if sigma_0 < delta_l
@@ -95,6 +98,9 @@ function [mu, sample] = eigensolver_lower(A, n, m, kappa, epsilon)
                 for j = -s:s
                     sample = sample+1;
                     mu = center + (i*delta_l+j*delta_l*1i);
+                    if imag(mu_candidate) >= 0
+                        continue;
+                    end                    
                     sv = svd(A-mu*I);
                     sigma_0 = min(sv);
                     if sigma_0 < delta_l
