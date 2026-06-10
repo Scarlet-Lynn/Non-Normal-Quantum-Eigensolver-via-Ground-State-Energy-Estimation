@@ -71,23 +71,19 @@ end
 % fix m=2 and epsilon = 0.01, vary kappa
 n = 4;
 m = 2;
-kappa = [1, 5, 10];
+kappa = [1, 2.5, 5, 7.5, 10];
 epsilon = 0.01;
 J = [1+1i 1 0 0
      0 1+1i 0 0
      0 0 -2 1
      0 0 0 -2]; % the Jordan matrix
-eig_est = zeros(1, 3);
-sample_count = zeros(1, 3);
-for t = 1:3
-    P = gallery('randsvd', n, kappa(t)); generate an invertible matrix so that A = P * J / P has Jordan condition number=kappa(i)
+eig_est = zeros(1, 5);
+sample_count = zeros(1, 5);
+for t = 1:5
+    P = gallery('randsvd', n, kappa(t)); % generate an invertible matrix so that A = P * J / P has Jordan condition number=kappa(i)
     A = P * J / P;
     [eig_est(t), sample_count(t)] = eigensolver(A, n, m, kappa(t), epsilon);
 end
-
-% result
-% sample_count = [1.6526e+07, 4.0000e+08, 1.5274e+09];
-% eig_est = [0.9974 + 1.0000i, 0.9980 + 1.0000i, 0.9988 + 1.0000i];
 
 figure;
 loglog(kappa, sample_count, 'o', 'MarkerFaceColor', 'k');
@@ -108,22 +104,18 @@ hold off;
 n = 4;
 m = 2;
 kappa = 1;
-epsilon = [0.1, 0.01, 0.001];
+epsilon = [0.1, 0.05, 0.01, 0.005, 0.001];
 J = [1+1i 1 0 0
      0 1+1i 0 0
      0 0 -2 1
      0 0 0 -2];
 P = gallery('randsvd', n, 1);
 A = P * J / P;
-eig_est = zeros(1, 3);
-sample_count = zeros(1, 3);
-for t = 1:3
+eig_est = zeros(1, 5);
+sample_count = zeros(1, 5);
+for t = 1:5
     [eig_est(t), sample_count(t)] = eigensolver(A, n, m, kappa, epsilon(t));
 end
-
-% result
-% eig_est = [0.9792 + 0.9996i, 0.9974 + 1.0000i, 0.9997 + 1.0000i];
-% sample_count = [2.6001e+05, 1.6526e+07, 1.0570e+09];
 
 figure;
 loglog(epsilon, sample_count, 'o', 'MarkerFaceColor', 'k');
